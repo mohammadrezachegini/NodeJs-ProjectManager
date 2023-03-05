@@ -1,13 +1,13 @@
 
 
-module.exports = class Appliction{
+module.exports = class Application{
     #express = require("express")
     #app = this.#express()
 
     constructor(PORT, DB_URL){
         this.configDatabase(DB_URL)
-        this.configApplication(PORT)
-        this.createServer
+        this.configApplication()
+        this.createServer(PORT)
         this.createRoutes()
         this.errorHandler
 
@@ -25,15 +25,20 @@ module.exports = class Appliction{
     createServer(PORT){
         const http = require("http")
         const server = http.createServer(this.#app);
-        server.listen(`Server is running on http://localhost:${PORT}`)
+        server.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`);
+        })
     }
 
     configDatabase(DB_URL){
         const mongoose = require("mongoose")
-        mongoose.connect(DB_URL, (err) => {
-            if (err) throw err
-            return console.log("Connect to DB is Successful")
-        })
+
+        mongoose.set("strictQuery", true)
+        mongoose.connect(DB_URL).then(()=>{
+            console.log("Connect to DB is Successful");
+        }).catch((e)=>{
+            console.log("No connection " + e);
+        });
     }
 
     errorHandler(){
@@ -49,9 +54,9 @@ module.exports = class Appliction{
             const status = error?.status || 500;
             const message = error?.message || "Internal Server Error"
             return res.status(status).json({
-                status,
+                status:status,
                 success: false,
-                message
+                message:message
             })
         })
     }
