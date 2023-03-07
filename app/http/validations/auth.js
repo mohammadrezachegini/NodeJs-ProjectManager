@@ -18,13 +18,13 @@ function registerValidator() {
             throw "You username could not be empty"
         }),
         body("email").isEmail().withMessage("your email is invalid").custom( async email => {
-            const user = UserModel.findOne({email})
+            const user = await UserModel.findOne({email})
             if(user) throw " Email is already existed"
             return true
         }),
         body("mobile").isMobilePhone("en-CA").withMessage("Your mobile Number is incorrect")
         .custom( async mobile => {
-            const user = UserModel.findOne({mobile})
+            const user = await UserModel.findOne({mobile})
             if(user) throw " Mobile is already existed"
             return true
         }),
@@ -42,6 +42,27 @@ function registerValidator() {
 
 }
 
+
+
+
+function loginValidator() {
+
+    return [
+        body("username").custom( username => {
+            
+            const usernameRegex = /^[a-z]+[a-z0-9\_\.]{2,}/gi;
+                if(usernameRegex.test(username)){
+                    return true
+                }
+                throw "Your username is invalid"
+            }
+        ),
+        
+        body("password").isLength({min: 6, max: 16}).withMessage("Your password should be between 6 and 16 characters")
+        
+    ]
+}
 module.exports= {
-    registerValidator
+    registerValidator,
+    loginValidator
 }

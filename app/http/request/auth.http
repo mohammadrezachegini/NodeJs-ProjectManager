@@ -2,11 +2,24 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "username": "asdasdsa",
-    "email": "kwrhekwjeh@skdjfh.con",
-    "mobile": "2362368752",
-    "password": "salaasdm",
-    "confirm_password": "salaasdm"
+    "username": "salam",
+    "email": "salam@salam.com",
+    "mobile": "3269658745",
+    "password": "salamsalam",
+    "confirm_password": "salamsalam"
+
+
+}
+
+
+#### login
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "username": "salam",
+    "password": "salamsalam"
 
 
 }

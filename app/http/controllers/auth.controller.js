@@ -1,5 +1,6 @@
 const { UserModel } = require("../../models/user");
 const { HashString } = require("../../modules/function");
+const bcrypt = require("bcrypt")
 
 class AuthControllers{
 
@@ -15,10 +16,27 @@ class AuthControllers{
         } catch (error) {
             next(error)
         }
-        // return res.json(req.body);
+        
     }
 
-    login(){}
+    async login(req,res,next){
+        try {
+            const {username, password} = req.body
+            const usr = await UserModel.findOne({username})
+            if(!usr) throw {status: 401, message: "Username or password is wrong"}
+            const compatreResult = bcrypt.compareSync(password, usr.password)
+            if(!compatreResult) throw {status: 401, message: "Username or password is wrong"}
+            
+            return res.status(200).json({
+                status:200,
+                success: true,
+                message: "successfull logged in",
+                token: ""
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
 
     resetPassword(){}
 }
