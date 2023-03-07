@@ -1,0 +1,12 @@
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "username": "asdasdsa",
+    "email": "kwrhekwjeh@skdjfh.con",
+    "mobile": "2362368752",
+    "password": "salaasdm",
+    "confirm_password": "salaasdm"
+
+
+}
