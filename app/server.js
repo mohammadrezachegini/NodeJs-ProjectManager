@@ -36,7 +36,7 @@ module.exports = class Application {
             return res.status(404).json({
                 status : 404,
                 success : false,
-                message : "صفحه یا ادرس مورد نظر یافت نشد"
+                message : "Not Found page"
             })
         });
         this.#app.use((error, req, res, next) => {
