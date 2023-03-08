@@ -1,5 +1,5 @@
 const { UserModel } = require("../../models/user");
-const { HashString } = require("../../modules/function");
+const { HashString, tokenGenerator } = require("../../modules/function");
 const bcrypt = require("bcrypt")
 
 class AuthControllers{
@@ -31,7 +31,7 @@ class AuthControllers{
                 status:200,
                 success: true,
                 message: "successfull logged in",
-                token: ""
+                token: tokenGenerator({username: username})
             })
         } catch (error) {
             next(error)
