@@ -1,6 +1,7 @@
 const { UserModel } = require("../../models/user");
 const { HashString, tokenGenerator } = require("../../modules/function");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const user = require("../../routers/user");
 
 class AuthControllers{
 
@@ -26,12 +27,14 @@ class AuthControllers{
             if(!usr) throw {status: 401, message: "Username or password is wrong"}
             const compatreResult = bcrypt.compareSync(password, usr.password)
             if(!compatreResult) throw {status: 401, message: "Username or password is wrong"}
-            
+            const token = tokenGenerator({username: username})
+            usr.token = token;
+            await usr.save();
             return res.status(200).json({
                 status:200,
                 success: true,
                 message: "successfull logged in",
-                token: tokenGenerator({username: username})
+                token
             })
         } catch (error) {
             next(error)
