@@ -12,8 +12,14 @@ function tokenGenerator(payload){
     return token
 }
 
+function verifyJwtToken(token){
+    const result = jwt.verify(token, process.env.SECRET_KEY);
+    if(!result?.username) throw {status: 401, message:"Please Login in to your account"}
+    return result
+}
 
 module.exports = {
     HashString,
-    tokenGenerator
+    tokenGenerator,
+    verifyJwtToken
 }
