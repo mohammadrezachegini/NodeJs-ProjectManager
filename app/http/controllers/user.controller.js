@@ -48,7 +48,7 @@ class UserController{
         
         try {
             const userID = req.user._id
-            if(Object.keys(req.file).length == 0) throw {status: 400, message: "Please upload a picture"}
+            // if(Object.keys(req.file).length == 0) throw {status: 400, message: "Please upload a picture"}
             const filePath = req.file?.path.replace("\\\\", "/").substring(7);
             const result = await UserModel.updateOne({_id: userID}, {$set: {profile_image: filePath}})
             if(result.modifiedCount == 0) throw {status:400, message: "Failed Update Profile"}
