@@ -1,6 +1,30 @@
+const req = require("express/lib/request")
+const res = require("express/lib/response")
+const {ProjectModel} = require("../../models/project")
 class ProjectController{
 
-    createProject(){}
+    async createProject(req,res,next){
+        try {
+            const {title, text} = req.body
+            const owner = req.user._id
+            const result = await ProjectModel.create({
+                title,
+                text,
+                owner
+            })
+            if(!result) throw {
+                status: 400,
+                message: "There is a problem to add a project"
+            }
+            return res.status(201).json({
+                status: 201,
+                success: true,
+                message: "Added Project successfully"
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
 
     getAllProjects(){}
 

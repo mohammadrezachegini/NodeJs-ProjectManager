@@ -8,6 +8,7 @@ Content-Type:  application/json
 
 {
 
-    "title": "",
-    "foo": "bar"
+    "title": "salam",
+    "text": "salamsalamsalamsalamsalamsalamsalam",
+    "private": "true"
 }
