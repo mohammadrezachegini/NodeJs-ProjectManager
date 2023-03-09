@@ -9,6 +9,5 @@ Content-Type:  application/json
 {
 
     "title": "salam",
-    "text": "salamsalamsalamsalamsalamsalamsalam",
-    "private": "true"
-}
+    "text": "salamsalamsalamsalamsalamsalamsalam"
+    }
