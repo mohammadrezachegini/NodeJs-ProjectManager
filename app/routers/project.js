@@ -9,7 +9,7 @@ const {mongoIDValidator} = require("../http/validations/public")
 
 router.post("/create", fileupload(), checkLogin, uploadFile  ,createProjectValidator(), expressValidatorMapper , ProjectController.createProject)
 router.get("/list",  checkLogin , ProjectController.getAllProjects)
-router.get("/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.getProjectById)
+router.get("/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.getProjectById.bind(ProjectController))
 router.delete("/remove/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.removeProject)
 router.post("/edit/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.updateProject)
 

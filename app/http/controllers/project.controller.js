@@ -3,7 +3,7 @@ const autoBind = require("auto-bind")
 class ProjectController{
 
     constructor(){
-        autoBind(this)
+        // autoBind(this)
     }
 
     async createProject(req,res,next){
