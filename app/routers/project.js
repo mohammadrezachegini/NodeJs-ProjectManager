@@ -5,8 +5,14 @@ const { expressValidatorMapper } = require("../http/middlewares/CheckErrors");
 const { createProjectValidator } = require("../http/validations/project");
 const { uploadFile } = require("../modules/express-fileUpload");
 const fileupload = require("express-fileupload");
+const {mongoIDValidator} = require("../http/validations/public")
 
 router.post("/create", fileupload(), checkLogin, uploadFile  ,createProjectValidator(), expressValidatorMapper , ProjectController.createProject)
+router.post("/list",  checkLogin , ProjectController.getAllProjects)
+router.post("/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.getProjectById)
+router.post("/remove/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.removeProject)
+router.post("/edit/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.updateProject)
+
 
 
 module.exports = {

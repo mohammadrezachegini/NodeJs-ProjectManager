@@ -36,15 +36,50 @@ class ProjectController{
         }
     }
 
-    getProjectById(){}
+    async findProject(ProjectId, owner){
+        const project = await ProjectModel.findOne({owner, _id: ProjectId})
+        if(!project) throw {status :  404, message: "Project Not Found"}
+        return project
+
+    }
+
+    async getProjectById(req,res,next){
+        try {
+            const owner = req.user._id;
+            const projectID = req.params.id;
+            const project  = await this.findProject(projectID, owner) 
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                project
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async removeProject(){
+        try {
+            const owner = req.user._id;
+            const projectID = req.params.id;
+            const project  = await this.findProject(projectID, owner)
+            const deleteProjectResult = await ProjectModel.deleteOne({_id : projectID})
+            if(deleteProjectResult.deletedCount == 0) throw {status: 400, message: "Project did not remove"}
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "Project deleted successfully"
+                
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
 
     getAllProjectOfTeam(){}
 
     getProjectofUser(){}
 
     updateProject(){}
-
-    removeProject(){}
 
 
 }
