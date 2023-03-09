@@ -12,7 +12,7 @@ router.get("/list",  checkLogin , ProjectController.getAllProjects)
 router.get("/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.getProjectById)
 router.delete("/remove/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.removeProject)
 router.put("/edit/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.updateProject)
-router.patch("/edit/:id",  checkLogin , mongoIDValidator(), expressValidatorMapper, ProjectController.updateProject)
+router.patch("/edit-projectImage/:id", fileupload(), checkLogin, uploadFile , mongoIDValidator(), expressValidatorMapper, ProjectController.updateProjectImage)
 
 
 

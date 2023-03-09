@@ -1,5 +1,6 @@
 const {ProjectModel} = require("../../models/project")
-const autoBind = require("auto-bind")
+const autoBind = require("auto-bind");
+const { createLink } = require("../../modules/function");
 class ProjectController{
 
     constructor(){
@@ -8,9 +9,10 @@ class ProjectController{
 
     async createProject(req,res,next){
         try {
-            console.log(req.body)
-            const {title, text, image, tags } = req.body;
-            // console.log(tags);
+            console.log("Body ISSSSSSS" + req.body)
+            const {title, text, tags } = req.body;
+            const image = req.files.image
+            console.log("Image innnnnnn" + req.files.image);
             const owner = req.user._id
             const result = await ProjectModel.create({title, text, owner, image, tags})
             if(!result) throw {
@@ -31,6 +33,9 @@ class ProjectController{
         try {
             const owner = req.user._id
             const projects = await ProjectModel.find({owner})
+            for (const project of projects) {
+                project.image = createLink(project.image,req)
+            }
             return res.status(200).json({
                 status: 200,
                 success: true,
@@ -53,6 +58,7 @@ class ProjectController{
             const owner = req.user._id;
             const projectID = req.params.id;
             const project  = await this.findProject(projectID, owner) 
+            project.image = createLink(project.image,req)
             return res.status(200).json({
                 status: 200,
                 success: true,
@@ -107,6 +113,28 @@ class ProjectController{
         }
     }
 
+    async updateProjectImage(req,res,next){
+        try {
+            const image = req.files.image;
+            console.log("CONST LOG IMAGE" + image);
+            const owner = req.user._id;
+            const projectID = req.params.id
+            console.log("projectIDprojectIDprojectID" + projectID);
+            const a = await this.findProject(projectID, owner)
+            console.log("FIND PROJEC?T" + a);
+            await this.findProject(projectID, owner)
+            const updateResult =  await ProjectModel.updateOne({_id: projectID}, {$set: {image}})
+            console.log("updateResult     " + updateResult);
+            if(updateResult.modifiedCount == 0) throw {status: 400, message: "Updated profile failed"}
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "updated project sucessfully"           
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
 
     getAllProjectOfTeam(){}
 
