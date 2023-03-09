@@ -1,5 +1,10 @@
 const {ProjectModel} = require("../../models/project")
+const autoBind = require("auto-bind")
 class ProjectController{
+
+    constructor(){
+        autoBind(this)
+    }
 
     async createProject(req,res,next){
         try {
@@ -68,7 +73,7 @@ class ProjectController{
                 status: 200,
                 success: true,
                 message: "Project deleted successfully"
-                
+
             })
         } catch (error) {
             next(error)
