@@ -140,7 +140,7 @@ class UserController{
 
     editSkills(){}
 
-    async acceptInvitation(req,res,next){
+    async changeRequestByStatus(req,res,next){
         try {
             const {id, status} = req.params;
             const requests = await UserModel.findOne({"invitations._id": id})
@@ -158,6 +158,8 @@ class UserController{
                 message: "change request accepted"
             })
         } catch (error) {
+
+            next(error)
             
         }
     }
