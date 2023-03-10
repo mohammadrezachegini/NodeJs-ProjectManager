@@ -39,6 +39,22 @@ class TeamController{
         }
     }
 
+
+    async getTeamById(req,res,next){
+        try {
+            const teamID = req.params.id
+            const team = await TeamModel.findById(teamID)
+            if(!team) throw {status : 404, message: "Team is not found"}
+            return res.status(200).json({
+                status:200,
+                success: true,
+                team: team
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+
     inviteUserToTeam(){}
 
     removeTeamById(){}
