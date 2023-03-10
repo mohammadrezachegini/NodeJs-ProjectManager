@@ -1,4 +1,5 @@
-const { body } = require("express-validator")
+const { body } = require("express-validator");
+const { param } = require("express/lib/request");
 const { TeamModel } = require("../../models/team")
 
 
@@ -19,6 +20,19 @@ function createTeamnValidator(){
     ]
 }
 
+//  function inviteToTeam(){
+//     return [
+//         param("teamID").custom(async (teamID, {req}) => {
+//             const userID = req.user._id
+//             const team = await TeamModel.findOne({
+//                 $or: [{owner: userID}, {users: userID}], _id: teamID
+//             })
+//             if(!team) throw {status: 404, message: "team not found to invite people"}
+//         }),
+
+//     ]
+// }
+
 module.exports = {
-    createTeamnValidator
+    createTeamnValidator,
 }

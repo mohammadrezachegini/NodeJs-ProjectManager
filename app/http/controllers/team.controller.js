@@ -1,9 +1,13 @@
+const autoBind = require("auto-bind");
 const res = require("express/lib/response");
 const { TeamModel } = require("../../models/team");
+const { UserModel } = require("../../models/user");
 
 class TeamController{
 
-     
+    constructor(){
+        autoBind(this)
+    }     
 
     async createTeam(req,res,next){
         try {
@@ -75,7 +79,46 @@ class TeamController{
         }
     }
 
-    inviteUserToTeam(){}
+    async inviteUserToTeam(req,res,next){
+        try {
+            const userID = req.user._id
+            const {username, teamID} = req.params;
+            const team = await TeamModel.findOne({
+                $or: [{owner: userID}, {users: userID}], _id: teamID
+            })
+            if(!team) throw {status: 404, message: "team not found to invite people"}
+            const user = await UserModel.findOne({username});
+            if(!user) throw {status: 400, message: "user not found to invite to the group"}
+            const userInvited = await TeamModel.findOne({
+                $or: [{owner: userID}, {users: user._id}], _id: teamID
+            })
+            if(userInvited) throw {status: 404, message: "the user already invited"}
+            
+            const request = {
+                caller:  req.user.username,
+                dateRequest: new Date,
+                teamID,
+                status: "pending"
+            }
+
+            const updatewUserResult = await UserModel.updateOne({username}, {
+                $push: {
+                    invitation: request
+                }
+            })
+
+            if(updatewUserResult.modifiedCount == 0) throw {status: 500, message: "invitation not recorded"};
+            return res.status(200).json({
+                status: 200,
+                success: "",
+                message: "the request is successful"
+            })
+            
+
+        } catch (error) {
+            next(error)
+        }
+    }
 
     async removeTeamById(req,res,next){
         try {
