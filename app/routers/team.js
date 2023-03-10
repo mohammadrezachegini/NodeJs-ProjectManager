@@ -8,7 +8,9 @@ const {mongoIDValidator} = require("../http/validations/public")
 
 router.post("/create", checkLogin, createTeamnValidator(), expressValidatorMapper, TeamController.createTeam)
 router.get("/list", checkLogin, TeamController.getListOfTeam)
+router.get("/me", checkLogin, TeamController.getMyTeam)
 router.get("/:id", checkLogin,  mongoIDValidator(), expressValidatorMapper, TeamController.getTeamById)
+router.delete("/remove/:id", checkLogin,  mongoIDValidator(), expressValidatorMapper, TeamController.removeTeamById)
 
 // router.get()
 

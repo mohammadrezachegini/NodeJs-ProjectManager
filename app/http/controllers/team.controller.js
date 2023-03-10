@@ -3,6 +3,7 @@ const { TeamModel } = require("../../models/team");
 
 class TeamController{
 
+     
 
     async createTeam(req,res,next){
         try {
@@ -55,9 +56,44 @@ class TeamController{
         }
     }
 
+    async getMyTeam(req,res,next){
+        try {
+            const userID = req.user._id;
+            const teams = await TeamModel.find({
+                $or: [
+                    {owner: userID},
+                    {users: userID}
+                ]
+            });
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                teams: teams
+            })         
+        } catch (error) {
+            next(error)
+        }
+    }
+
     inviteUserToTeam(){}
 
-    removeTeamById(){}
+    async removeTeamById(req,res,next){
+        try {
+            const teamID = req.params.id;
+            const team = await TeamModel.findById(teamID);
+            if(!team) throw {status: 404, message: "Team is nout found" }
+            const result = await TeamModel.deleteOne({_id: teamID});
+            if(result.deletedCount == 0) throw {status: 500, message: "Delete team failed"}
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                message: "deleted team successfully"
+            })
+
+        } catch (error) {
+            next(error)
+        }
+    }
 
     updateTeam(){}
 
