@@ -64,6 +64,18 @@ class UserController{
         }
     }
 
+    async getAllRequests(req,res,next){
+        try {
+            const userID = req.user._id;
+            const {invitation} = await UserModel.findOne({_id: userID}, {invitation: 1})
+            return res.json({
+                requests: invitation || []
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+
     addSkills(){}
 
     editSkills(){}
