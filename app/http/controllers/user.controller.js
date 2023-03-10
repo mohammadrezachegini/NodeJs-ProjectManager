@@ -140,7 +140,27 @@ class UserController{
 
     editSkills(){}
 
-    acceptInvitation(){}
+    async acceptInvitation(req,res,next){
+        try {
+            const {id, status} = req.params;
+            const requests = await UserModel.findOne({"invitations._id": id})
+            if(!request) throw {status: 404, message:"no request found with these details"}
+            const findRequest = requests.invitation.find(item => item.id == id)
+            if(findRequest.status !== "pending") throw {status: 400, message: "this request already responded"}
+            if(!["accepted", "rejected"].includes(status)) throw {status: 400, message:"the information that you sent is wrong"}
+            const updateResult = await UserModel.updateOne({"invitation._id": id}, {
+                $set: {"invitation.$.status" : status}
+            }) 
+            if(updateResult.modifiedCount == 0) throw {status: 500, message: "the change request didnt accept"}
+            return res.status(200).json({
+                status:200,
+                success: true,
+                message: "change request accepted"
+            })
+        } catch (error) {
+            
+        }
+    }
 
     rejectInvitation(){}
 }

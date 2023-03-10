@@ -11,6 +11,7 @@ router.post("/profile", checkLogin, UserController.editProfile);
 router.post("/profile-img",  upload_multer.single("image"), ImageValidator() , expressValidatorMapper ,checkLogin, UserController.uploadProfileImage);
 router.get("/requests", checkLogin, UserController.getAllRequests)
 router.get("/requests/:status", checkLogin,UserController.getRequestByStatus)
+router.get("/change-status-requests/:id/:status", checkLogin,UserController.acceptInvitation)
 module.exports = {
     userRoutes: router
 }
