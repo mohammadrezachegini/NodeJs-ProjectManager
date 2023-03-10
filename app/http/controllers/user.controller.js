@@ -76,6 +76,66 @@ class UserController{
         }
     }
 
+
+    async getRequestByStatus(req,res,next){
+        try { 
+
+            const {status} = req.params;
+            const userID = req.user._id
+            const request = await UserModel.aggregate([
+                {
+                $match: {_id: userID}
+                },
+                {
+                    $project: {
+                        invitation: 1,
+                        _id: 0,
+                        invitation  : {
+                            $filter: {
+                                input: "$invitation",
+                                as: "request",
+                                cond: {
+                                    $eq: ["$$request.status", status]
+                                }
+                            }
+                        }
+                    }
+                }
+        ])
+         return res.status(200).json({
+            status:200,
+            success: true,
+            request: request?.[0]?.invitation ||  []
+         })
+        } catch (error) {
+             next(error)
+        } 
+     }
+
+    // async getPendingRequests(req,res,next){
+    //    try {
+        
+    //    } catch (error) {
+    //         next(error)
+    //    } 
+    // }
+
+    // async getAcceptedRequests(req,res,next){
+    //     try {
+         
+    //     } catch (error) {
+    //          next(error)
+    //     } 
+    //  }
+
+    //  async getRejectedRequests(req,res,next){
+    //     try {
+         
+    //     } catch (error) {
+    //          next(error)
+    //     } 
+    //  }
+
     addSkills(){}
 
     editSkills(){}
